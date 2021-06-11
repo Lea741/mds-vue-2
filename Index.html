@@ -256,7 +256,7 @@
 									</div>
 
 								<div class="date">Août 2020 </div>
-								<div class="lieu">Le Voyage à Nantes</div>
+								<div class="lieux">Le Voyage à Nantes</div>
 								<div class="mission">
 								Communication
 								interne/externe
@@ -322,38 +322,52 @@
 		</div><!-- Fin balise ID Wrapper-->
 	</div>
 		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+const apiURL =
+	"https://my-portfolio-lea.willr.fr/wp-json/wp/v2/cv?slug=mon-cv";
 new Vue({
   el: '#wrapper',
   data: {
+		experiences: [],
 		test: "Lea",
-	experiences: [
-
-	{
-		lieux: "Le voyage à Nantes",
-		periode: "2021",
-		missions: "communication interne/externe Gestion de l'accueil Relation client Réception",
-	},
-
-	{
-		lieux: "Vision 2I",
-		periode: "2021",
-		missions: "missions",
-	},
-
-
-
-
-	]
-
+// 	experiences: [
+//
+// 	{
+// 		lieux: "Le voyage à Nantes",
+// 		periode: "2021",
+// 		missions: "communication interne/externe Gestion de l'accueil Relation client Réception",
+// 	},
+//
+// 	{
+// 		lieux: "Vision 2I",
+// 		periode: "2021",
+// 		missions: "missions",
+// 	},
+//
+// ],
+mesDonnees: {},
   },
 
   methods: {
-    addItem: function() {
-      this.list.push('Orange' + (++this.counter).toString())
-    }
-  }
+// addItem: function() {
+//       this.list.push('Orange' + (++this.counter).toString())
+//     },
+		fetchData: async function () {
+			try {
+				const response = await axios.get(apiURL);
+				console.log(response);
+				this.mesDonnees = response.data[0];
+				this.experiences= response.data[0].acf.experiences;
+				this.competences= response.data[0].acf.competences;
+			} catch (error) {
+				console.log(error);
+			}
+  },
+},
+	created: function () {
+		this.fetchData();
+	},
 })
 </script>
 	</body>
